@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# define warndate as 10 days before cert expiration
+# define warntime in seconds, equals 10 days before cert expiration
 # you can call the script weekly via cron then
-WARNDATE=$(date -d "+10 days" +"%s")
+WARNTIME=864000
 
 # define let's encrypt work directory
 LEDIR=/home/$USER/.config/letsencrypt
@@ -37,15 +37,11 @@ if ! grep -q "renew-by-default" $LEDIR/cli.ini; then
         fi
 fi
 
-# read expiration date from let's encrypt directory
-for cert in $CERTDIR/cert.pem; do
-	toDate=$(date -d "$(openssl x509 -in $cert -noout -enddate | cut -f2 -d'=')" +"%s")
-	# check whether certs are due to expire
-	if [ $WARNDATE -gt $toDate ]; then
+# check expiration date from let's encrypt directory
+	if openssl x509 -in $CERTDIR/cert.pem -checkend $WARNTIME -noout; then
 	# create new certificates
 	letsencrypt certonly
 	# configure the uberspace webserver to use the new certificates
 	uberspace-prepare-certificate -k $CERTDIR/privkey.pem -c $CERTDIR/cert.pem
 fi
-done
 exit 0
