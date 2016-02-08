@@ -38,7 +38,7 @@ if ! grep -q "renew-by-default" $LEDIR/cli.ini; then
 fi
 
 # check expiration date from let's encrypt directory
-	if openssl x509 -in $CERTDIR/cert.pem -checkend $WARNTIME -noout; then
+	if ! openssl x509 -in $CERTDIR/cert.pem -checkend $WARNTIME -noout; then
 	# create new certificates
 	letsencrypt certonly
 	# configure the uberspace webserver to use the new certificates
