@@ -42,6 +42,6 @@ fi
 	# create new certificates
 	letsencrypt certonly
 	# configure the uberspace webserver to use the new certificates
-	uberspace-prepare-certificate -k $CERTDIR/privkey.pem -c $CERTDIR/cert.pem
+	uberspace-add-certificate -k $CERTDIR/privkey.pem -c $CERTDIR/cert.pem
 fi
 exit 0
