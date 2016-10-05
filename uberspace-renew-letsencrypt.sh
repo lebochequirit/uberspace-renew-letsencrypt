@@ -11,15 +11,6 @@ LEDIR=/home/$USER/.config/letsencrypt
 CERTDIR=$(basename $LEDIR/live/*)
 CERTDIR=$LEDIR/live/$CERTDIR
 
-# check if let's encrypt cli parameters are set and set if necessary
-# agree-dev-preview first, most likely commented out
-if ! grep -q "agree-dev-preview" $LEDIR/cli.ini; then
-        echo "agree-dev-preview = True" >> $LEDIR/cli.ini; else
-        if grep -q "#agree-dev-preview = True" $LEDIR/cli.ini; then
-                cp $LEDIR/cli.ini $LEDIR/cli.bak
-                sed -i s/#agree-dev-preview/agree-dev-preview/g $LEDIR/cli.ini
-        fi
-fi
 # now agree-tos
 if ! grep -q "agree-tos" $LEDIR/cli.ini; then
         echo "agree-tos = True" >> $LEDIR/cli.ini; else
